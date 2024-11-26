@@ -31,8 +31,8 @@ public class Menu {
                     System.out.print("Introduce el número de desplazamiento: ");
                     int desplazamiento = scanner.nextInt();
                     FileManager fileManager = new FileManager();
-                    String ruta = "/Users/tesseract/Desktop/CURSOS/JAVA/MODULO1/PROYECTO-FINAL/Cesar/files/texto1.txt";
-                    String rutaCifrado = "/Users/tesseract/Desktop/CURSOS/JAVA/MODULO1/PROYECTO-FINAL/Cesar/files/texto_cifrado.txt";
+                    String ruta = "/Users/tesseract/Desktop/MASTER/David-Barzallo-ProyectoFinal-Modulo1/files/texto1.txt";
+                    String rutaCifrado = "/Users/tesseract/Desktop/MASTER/David-Barzallo-ProyectoFinal-Modulo1/files/texto_cifrado.txt";
                     String contenidoArchivo = fileManager.leerArchivo(ruta);
                     String textoCifrado = Cipher.cifrarTexto(contenidoArchivo, desplazamiento);
 
@@ -50,9 +50,9 @@ public class Menu {
                     System.out.print("Introduce la clave de desplazamiento: ");
                     int desplazamientoIzquierda = scanner.nextInt();
                     fileManager = new FileManager();
-                    rutaCifrado = "/Users/tesseract/Desktop/CURSOS/JAVA/MODULO1/PROYECTO-FINAL/Cesar/files/texto_cifrado.txt";
+                    rutaCifrado = "/Users/tesseract/Desktop/MASTER/David-Barzallo-ProyectoFinal-Modulo1/files/texto_cifrado.txt";
                     String contenidoArchivoCifrado = fileManager.leerArchivo(rutaCifrado);
-                    String rutaDesCifrado = "/Users/tesseract/Desktop/CURSOS/JAVA/MODULO1/PROYECTO-FINAL/Cesar/files/texto_decifrado.txt";
+                    String rutaDesCifrado = "/Users/tesseract/Desktop/MASTER/David-Barzallo-ProyectoFinal-Modulo1/files/texto_decifrado.txt";
 
                     String textoDesencriptado = Cipher.descifrarTexto(contenidoArchivoCifrado, desplazamientoIzquierda);
                     Cipher.guardarEnArchivo2(textoDesencriptado, rutaDesCifrado);
