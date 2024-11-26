@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Cipher {
 
-    private static String alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?%$@&*(){};:'\".,></#-+=- ";
+    private static String alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?%$@&*(){};:'\\\".,></#-+=- ";
 
     public static String desplazarAlfabeto(int posicion, boolean haciaDerecha) {
         int longitud = alfabeto.length();
