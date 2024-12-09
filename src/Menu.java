@@ -1,92 +1,122 @@
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Menu {
 
+//    private static String relativePath;
+
     public static void mostrarMenu() {
         Scanner scanner = new Scanner(System.in);
-        int option = 0;
-        Cipher cipher = new Cipher();
-        boolean salir = false;
+        FileManager fileManager = new FileManager();
 
-        while (!salir) {
-            System.out.println("Menu:");
-            System.out.println("1. Encryption");
-            System.out.println("2. Decryption with key");
-            System.out.println("3. Brute force");
-            System.out.println("4. Statistical analysis");
-            System.out.println("0. Exit");
-            System.out.println();
-            System.out.println("|||||||||||||||||||||");
-            System.out.print("Please select an option: ");
+        boolean exit = false;
 
-            option = scanner.nextInt();
+        while (!exit) {
+            printMenu();
 
+            int option = getUserInput(scanner, "Seleccione una opción (0-2): ");
             switch (option) {
                 case 1:
-                    System.out.println("--------------------------- ");
-                    System.out.println("Escogió: Encryption ");
-                    System.out.println("--------------------------- ");
-                    System.out.println();
-
-                    System.out.print("Introduce el número de desplazamiento: ");
-                    int desplazamiento = scanner.nextInt();
-                    FileManager fileManager = new FileManager();
-                    String ruta = "/Users/tesseract/Desktop/MASTER/David-Barzallo-ProyectoFinal-Modulo1/files/texto1.txt";
-                    String rutaCifrado = "/Users/tesseract/Desktop/MASTER/David-Barzallo-ProyectoFinal-Modulo1/files/texto_cifrado.txt";
-                    String contenidoArchivo = fileManager.leerArchivo(ruta);
-                    String textoCifrado = Cipher.cifrarTexto(contenidoArchivo, desplazamiento);
-
-                    Cipher.guardarEnArchivo(textoCifrado, rutaCifrado);
-
-                    System.out.println("--------------------------- ");
-                    System.out.println();
+                    metodoEncryption(scanner, fileManager);
                     break;
                 case 2:
-                    System.out.println("--------------------------- ");
-                    System.out.println("Escogió: Decryption with key ");
-                    System.out.println("--------------------------- ");
-                    System.out.println();
-
-                    System.out.print("Introduce la clave de desplazamiento: ");
-                    int desplazamientoIzquierda = scanner.nextInt();
-                    fileManager = new FileManager();
-                    rutaCifrado = "/Users/tesseract/Desktop/MASTER/David-Barzallo-ProyectoFinal-Modulo1/files/texto_cifrado.txt";
-                    String contenidoArchivoCifrado = fileManager.leerArchivo(rutaCifrado);
-                    String rutaDesCifrado = "/Users/tesseract/Desktop/MASTER/David-Barzallo-ProyectoFinal-Modulo1/files/texto_decifrado.txt";
-
-                    String textoDesencriptado = Cipher.descifrarTexto(contenidoArchivoCifrado, desplazamientoIzquierda);
-                    Cipher.guardarEnArchivo2(textoDesencriptado, rutaDesCifrado);
-                    break;
-                case 3:
-                    System.out.println("--------------------------- ");
-                    System.out.println("Escogió: Brute force ");
-                    System.out.println("--------------------------- ");
-                    System.out.println();
-                    break;
-                case 4:
-                    System.out.println("--------------------------- ");
-                    System.out.println("Escogió: Statistical Analisys ");
-                    System.out.println("--------------------------- ");
-                    System.out.println();
+                    metodoDecryption(scanner, fileManager);
                     break;
                 case 0:
                     System.out.println("--------------------------- ");
-                    System.out.println("Escogió: Exit ... ");
+                    System.out.println("Exiting program...");
                     System.out.println("--------------------------- ");
-                    System.out.println();
+                    scanner.close();
+                    System.exit(0);
                     break;
+
                 default:
                     System.out.println("--------------------------- ");
-                    System.out.println("Invalid option, please try again.");
+                    System.out.println("Opcion inválida, Try again.");
                     System.out.println("--------------------------- ");
-                    System.out.println();
             }
-        }
-        while (option != 0) ;
-        {
-            scanner.close();
+
+            exit = false;
         }
     }
+
+    private static void printMenu() {
+        System.out.println("Menu:");
+        System.out.println("1. Encryption");
+        System.out.println("2. Decryption with key");
+        System.out.println("0. Exit");
+        System.out.println("---------------------------");
+    }
+
+    private static int getUserInput(Scanner scanner, String prompt) {
+        System.out.print(prompt);
+        while (!scanner.hasNextInt()) {
+            System.out.print("Ingrese un número válido: ");
+            scanner.next();
+        }
+        return scanner.nextInt();
+    }
+
+    private static void metodoEncryption(Scanner scanner, FileManager fileManager) {
+        System.out.println("--------------------------- ");
+        System.out.println("Escogió: Encryption ");
+        System.out.println("--------------------------- ");
+
+        System.out.println("Escoge un archivo para encriptar:");
+        System.out.println("1. texto1.txt");
+        System.out.println("2. texto2.txt");
+        System.out.print("Escoge 1 o 2: ");
+        int opcionArchivo = scanner.nextInt();
+
+        String inputFile = (opcionArchivo == 1) ? "files/texto1.txt" : "files/texto2.txt";
+
+        int desplazamiento = getUserInput(scanner, "Introduce el número de desplazamiento: ");
+        try {
+            String ruta = getFilePath(inputFile);
+            String outputPath = getFilePath("files/texto_cifrado.txt");
+            String content = fileManager.leerArchivo(ruta);
+
+            if (content == null || content.isEmpty()) {
+                System.out.println("El archivo de entrada está vacío o no se pudo leer.");
+                return;
+            }
+
+            String textoEncriptado = Cipher.cifrarTexto(content, desplazamiento);
+            Cipher.guardarArchivo(textoEncriptado, outputPath);
+
+            System.out.println("Archivo cifrado guardado en: " + outputPath);
+        } catch (Exception e) {
+            System.err.println("Error durante el proceso de encriptación: " + e.getMessage());
+        }
+    }
+
+    private static void metodoDecryption(Scanner scanner, FileManager fileManager) {
+        System.out.println("--------------------------- ");
+        System.out.println("Escogió: Decryption with key ");
+        System.out.println("--------------------------- ");
+
+        int desplazamiento = getUserInput(scanner, "Introduce la clave de desplazamiento: ");
+        try {
+            String inputPath = getFilePath("files/texto_cifrado.txt");
+            String outputPath = getFilePath("files/texto_descifrado.txt");
+            String content = fileManager.leerArchivo(inputPath);
+
+            if (content == null || content.isEmpty()) {
+                System.out.println("El archivo cifrado está vacío o no se pudo leer.");
+                return;
+            }
+
+            String decryptedText = Cipher.descifrarTexto(content, desplazamiento);
+            Cipher.guardarArchivo(decryptedText, outputPath);
+
+            System.out.println("Archivo descifrado guardado en: " + outputPath);
+        } catch (Exception e) {
+            System.err.println("Error durante el proceso de desencriptación: " + e.getMessage());
+        }
+    }
+
+    private static String getFilePath(String relativePath) {
+        return Paths.get(System.getProperty("user.dir"), relativePath).toString();
+    }
+
 }
-
-
