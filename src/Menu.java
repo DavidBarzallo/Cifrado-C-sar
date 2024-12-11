@@ -5,6 +5,10 @@ public class Menu {
 
 //    private static String relativePath;
 
+    /**
+     * Este método muestra el menú inicial y permite el acceso a las diferentes opciones a traves del scanner.
+     *
+     * */
     public static void mostrarMenu() {
         Scanner scanner = new Scanner(System.in);
         FileManager fileManager = new FileManager();
@@ -57,6 +61,10 @@ public class Menu {
         return scanner.nextInt();
     }
 
+    /**
+     * Este método muestra las opciones de texto a encriptar y se escogen a traves del scanner.
+     *
+     * */
     private static void metodoEncryption(Scanner scanner, FileManager fileManager) {
         System.out.println("--------------------------- ");
         System.out.println("Escogió: Encryption ");
@@ -90,6 +98,11 @@ public class Menu {
         }
     }
 
+
+    /**
+     * Este método recoge el valor de desplazamiento a traves del scanner y lo usa como parámetro para la clase Cipher.
+     *
+     * */
     private static void metodoDecryption(Scanner scanner, FileManager fileManager) {
         System.out.println("--------------------------- ");
         System.out.println("Escogió: Decryption with key ");

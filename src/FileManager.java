@@ -3,6 +3,10 @@ import java.nio.charset.StandardCharsets;
 
 public class FileManager {
 
+    /**
+     * Este método encuentra el archivo actual en una ruta determinada y lo guarda en una variable contenido.
+     *
+     * */
     public String leerArchivo(String rutaArchivo) {
         // Leer el archivo en bytes y convertirlo a caracteres
         StringBuilder contenido = new StringBuilder();

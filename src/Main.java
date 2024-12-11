@@ -2,10 +2,9 @@ import java.awt.*;
 
 public class Main {
         public static void main(String[] args) {
-//            Menu menu=new Menu();
 
 //           MENU
-            System.out.println("\nHOLA, WELCOME TO CESAR\n\n Por favor escoge una opción del menú >>\n");
+            System.out.println("\nWELCOME TO CESAR\n\n Por favor escoge una opción del menú >>\n");
             Menu.mostrarMenu();
 
         }
