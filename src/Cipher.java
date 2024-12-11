@@ -2,76 +2,55 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+
+/**
+ * Esta clase crea el alfabeto que se desplazará hacia la derecha y se usará para comparar y reeplazar el texto
+ *
+ * */
 public class Cipher {
 
-    private static String alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?%$@&*(){};:'\\\".,></#-+=- ";
-
-    public static String desplazarAlfabeto(int posicion, boolean haciaDerecha) {
-        int longitud = alfabeto.length();
-        posicion = posicion % longitud;
-
-        if (!haciaDerecha) {
-            posicion = longitud - posicion;
-        }
-
-        return alfabeto.substring(posicion) + alfabeto.substring(0, posicion);
-    }
+    private static final String ALPHABETO = """
+            ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\
+            ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ\
+            !?%$@&*(){};:'\\".,></#-+=""";
 
     //METODO ENCRIPTAR
-
-    public static String cifrarTexto(String texto, int desplazamiento) {
-        // Alfabeto desplazado
-        String alfabetoDesplazado = desplazarAlfabeto(desplazamiento, true);
-
+    /**
+     * Este método desplaza el alfabeto y reemplaza cada letra del nuevo texto con su correspondiente desplazada.
+     * @return devuelve el resultado del desplazamiento hacia la derecha.
+     * */
+    public static String cifrarTexto(String text, int posicion) {
+        // Desplazar derecha
+        String alfabetoDesplazado = desplazarAlfabeto(posicion, true);
         StringBuilder textoCifrado = new StringBuilder();
 
-        // Recorrer el texto
-        for (char c : texto.toCharArray()) {
-            int indice = alfabeto.indexOf(c);
-            if (indice != -1) {
-                textoCifrado.append(alfabetoDesplazado.charAt(indice));
+        for (char c : text.toCharArray()) {
+            int index = ALPHABETO.indexOf(c);
+            if (index != -1) {
+                textoCifrado.append(alfabetoDesplazado.charAt(index));
             } else {
                 textoCifrado.append(c);
             }
         }
+
         return textoCifrado.toString();
     }
 
-    // guardar el cifrado en un archivo
-    public static void guardarEnArchivo(String textoCifrado, String rutaArchivo) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaArchivo))) {
-            writer.write(textoCifrado);
-            System.out.println("El texto cifrado se ha guardado con éxito: " + rutaArchivo);
-        } catch (IOException e) {
-            System.out.println("No se guardó el archivo: " + e.getMessage());
-        }
-    }
-
-
     // METODO DESENCRIPTAR
-
-    public static String desplazarAlfabetoIzquierda(int posicion, boolean haciaDerecha) {
-        int longitud = alfabeto.length();
-        posicion = (posicion % longitud + longitud) % longitud;
-
-        if (!haciaDerecha) {
-            posicion = longitud - posicion;
-        }
-        return alfabeto.substring(posicion) + alfabeto.substring(0, posicion);
-    }
-
-
-    public static String descifrarTexto(String textoCifrado, int desplazamiento) {
-
+    /**
+     * Este método vuelve el alfabeto a su posición inicial y lo reemplaza, cada letra del texto encriptado con su correspondiente desplazada.
+     * @return devuelve una string con el resultado del desplazamiento.
+     * */
+    public static String descifrarTexto(String text, int posicion) {
         // Desplazar izquierda
-        String alfabetoDesplazado2 = desplazarAlfabetoIzquierda(desplazamiento, true);
+        String alfabetoDesplazado = desplazarAlfabeto(posicion, true);
         StringBuilder textoDesencriptado = new StringBuilder();
 
         // Recorrer el texto
-        for (char c : textoCifrado.toCharArray()) {
-            int indice = alfabetoDesplazado2.indexOf(c);
-            if (indice != -1) {
-                textoDesencriptado.append(alfabeto.charAt(indice));
+        for (char c : text.toCharArray()) {
+            int index = alfabetoDesplazado.indexOf(c);
+            if (index != -1) {
+                textoDesencriptado.append(ALPHABETO.charAt(index));
             } else {
                 textoDesencriptado.append(c);
             }
@@ -80,14 +59,30 @@ public class Cipher {
         return textoDesencriptado.toString();
     }
 
+
+    private static String desplazarAlfabeto(int posicion, boolean haciaDerecha) {
+        int longitud = ALPHABETO.length();
+        posicion = posicion % longitud;
+
+        if (!haciaDerecha) {
+            posicion = longitud - posicion;
+        }
+
+        return ALPHABETO.substring(posicion) + ALPHABETO.substring(0, posicion);
+    }
+
     // guardar el desencriptado en un archivo
-    public static void guardarEnArchivo2(String textoDesencriptado, String rutaDesCifrado) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaDesCifrado))) {
+
+    /**
+     * Guarda el archivo desencriptado en un archivo.
+     * @param  filePath es la ruta donde guardar el archivo.
+     *
+     * */
+    public static void guardarArchivo(String textoDesencriptado, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(textoDesencriptado);
-            System.out.println("El texto desencriptado se ha guardado con éxito: " + rutaDesCifrado);
         } catch (IOException e) {
             System.out.println("No se guardó el archivo: " + e.getMessage());
         }
     }
 }
-
